@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+import datetime
 import pyfiglet
 
 # Setup the connection and authorizations between application and google sheets
@@ -17,7 +18,7 @@ SHEET = GSPREAD_CLIENT.open('BookWormz')
 ascii_banner = pyfiglet.figlet_format(">>> BOOK-WORMZ <<<")
 print(ascii_banner)
 
-CURRENT_LOGGED_IN_USER = None
+current_logged_in_user = None
 
 # new_sheet = SHEET.add_worksheet(title="testing", rows="100", cols="20")
 
@@ -92,7 +93,8 @@ def user_login():
                 print("Password cannot be empty, try again!")
 
         if authenticate_user(user_name, user_pass):
-            print(f"You are logged in as user {user_name}!")
+            current_logged_in_user = user_name
+            print(f"You are logged in as user {current_logged_in_user}!")
             break
 
         print("Your details are incorrect, please try again!")
@@ -108,6 +110,7 @@ def user_register():
         user_name_exists = check_username(user_name)
 
         if len(user_name) > 3 and len(user_name) < 11 and not user_name_exists:
+            print(f"Your username {user_name} is valid!")
             break
         if user_name_exists:
             print("Username already exists! Please pick another")
@@ -118,7 +121,34 @@ def user_register():
         if len(user_name) == 0:
             print("Username cannot be empty, try again!")
 
-    print(f"Your username {user_name} is valid!")
+    while True:
+        user_pass = input('Please choose a password (4-10 characters):\n')
+
+        if len(user_pass) > 3 and len(user_pass) < 11:
+            print(f"Your password {user_pass} is valid!")
+            break
+        if len(user_pass) > 0 and len(user_pass) < 4:
+            print("Password is too short! Try again")
+        if len(user_pass) > 10:
+            print("Password is too long! Try again")
+        if len(user_pass) == 0:
+            print("Password cannot be empty, try again!")
+           
+    while True:
+        user_pass_confirm = input("Please confirm your password:\n")
+
+        if user_pass_confirm == user_pass:
+            print("Passwords match!!")
+            break
+        if user_pass_confirm != user_pass:
+            print("Passwords do not match! Try again")
+
+    print(f"your details are {user_name} and {user_pass}")
+    # Write valid user detais to new sheet and populate rows
+    SHEET.add_worksheet(title=user_name, rows="100", cols="20")
+    user_sheet = SHEET.worksheet(user_name)
+    user_sheet.append_row(["Username", "Password", "Date Joined"])
+    user_sheet.append_row([user_name, user_pass, str(datetime.datetime.now().date())])
 
 
 def init():
