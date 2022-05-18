@@ -18,56 +18,6 @@ SHEET = GSPREAD_CLIENT.open('BookWormz')
 ascii_banner = pyfiglet.figlet_format(">>> BOOK-WORMZ <<<")
 print(ascii_banner)
 
-CURRENT_LOGGED_IN_USER = None
-
-# new_sheet = SHEET.add_worksheet(title="testing", rows="100", cols="20")
-
-
-def authenticate_user(user_name, user_pass):
-    """
-    This function takes the user details and checks them against those stored
-    in the google sheet for valid values.
-    """
-    # get list of current usernames from sheet
-    worksheet_objs = SHEET.worksheets()
-    username_list = []
-    for worksheet in worksheet_objs:
-        username_list.append(worksheet.title)
-
-    if user_name in username_list:
-        if check_password(user_name, user_pass):
-            return True
-    else:
-        return False
-
-
-def check_password(user_name, user_pass):
-    """
-    Utility function that checks user password in sheet
-    """
-    user_sheet = SHEET.worksheet(user_name)
-    user_data = user_sheet.get_all_values()
-    user_data_row = user_data[1]
-    user_password = user_data_row[1]
-    if user_pass == user_password:
-        return True
-    return False
-
-
-def check_username(user_name):
-    """
-    Utility function that checks if chosen username already exists in sheet
-    """
-    # get list of current usernames from sheet
-    worksheet_objs = SHEET.worksheets()
-    username_list = []
-    for worksheet in worksheet_objs:
-        username_list.append(worksheet.title)
-
-    if user_name in username_list:
-        return True
-    return False
-
 
 def user_login():
     """
@@ -76,21 +26,8 @@ def user_login():
     to the authenticate_user function.
     """
     while True:
-        while True:
-            user_name = input('Please enter your username:\n')
-
-            if len(user_name) > 0:
-                break
-            if len(user_name) == 0:
-                print("Username cannot be empty, try again!")
-
-        while True:
-            user_pass = input('Please enter your password:\n')
-
-            if len(user_pass) > 0:
-                break
-            if len(user_pass) == 0:
-                print("Password cannot be empty, try again!")
+        user_name = validate_login_input("username")
+        user_pass = validate_login_input("password")
 
         if authenticate_user(user_name, user_pass):
             print(f"You are logged in as user {user_name}!")
@@ -186,6 +123,69 @@ def view_all_books():
 
 def add_book():
     print("In add book function")
+
+# UTILITY FUNCTIONS
+
+
+def validate_login_input(input_name):
+    """
+    This function validates the user input for the login functionality, so that
+    the user cannot submit empty values
+    """
+    while True:
+        user_input_field = input(f'Please enter your {input_name}:\n')
+
+        if len(user_input_field) > 0:
+            return user_input_field
+            # break
+        if len(user_input_field) == 0:
+            print("Username cannot be empty, try again!")
+
+
+def authenticate_user(user_name, user_pass):
+    """
+    This function takes the user details and checks them against those stored
+    in the google sheet for valid values.
+    """
+    # get list of current usernames from sheet
+    worksheet_objs = SHEET.worksheets()
+    username_list = []
+    for worksheet in worksheet_objs:
+        username_list.append(worksheet.title)
+
+    if user_name in username_list:
+        if check_password(user_name, user_pass):
+            return True
+    else:
+        return False
+
+
+def check_password(user_name, user_pass):
+    """
+    Utility function that checks user password in sheet
+    """
+    user_sheet = SHEET.worksheet(user_name)
+    user_data = user_sheet.get_all_values()
+    user_data_row = user_data[1]
+    user_password = user_data_row[1]
+    if user_pass == user_password:
+        return True
+    return False
+
+
+def check_username(user_name):
+    """
+    Utility function that checks if chosen username already exists in sheet
+    """
+    # get list of current usernames from sheet
+    worksheet_objs = SHEET.worksheets()
+    username_list = []
+    for worksheet in worksheet_objs:
+        username_list.append(worksheet.title)
+
+    if user_name in username_list:
+        return True
+    return False
 
 
 def init():
