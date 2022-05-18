@@ -18,7 +18,7 @@ SHEET = GSPREAD_CLIENT.open('BookWormz')
 ascii_banner = pyfiglet.figlet_format(">>> BOOK-WORMZ <<<")
 print(ascii_banner)
 
-current_logged_in_user = None
+CURRENT_LOGGED_IN_USER = None
 
 # new_sheet = SHEET.add_worksheet(title="testing", rows="100", cols="20")
 
@@ -93,8 +93,8 @@ def user_login():
                 print("Password cannot be empty, try again!")
 
         if authenticate_user(user_name, user_pass):
-            current_logged_in_user = user_name
-            print(f"You are logged in as user {current_logged_in_user}!")
+            print(f"You are logged in as user {user_name}!")
+            user_dashboard()
             break
 
         print("Your details are incorrect, please try again!")
@@ -133,7 +133,7 @@ def user_register():
             print("Password is too long! Try again")
         if len(user_pass) == 0:
             print("Password cannot be empty, try again!")
-           
+
     while True:
         user_pass_confirm = input("Please confirm your password:\n")
 
@@ -143,12 +143,49 @@ def user_register():
         if user_pass_confirm != user_pass:
             print("Passwords do not match! Try again")
 
-    print(f"your details are {user_name} and {user_pass}")
+    print(f"You are signed up & logged in as user {user_name}!")
+
     # Write valid user detais to new sheet and populate rows
     SHEET.add_worksheet(title=user_name, rows="100", cols="20")
     user_sheet = SHEET.worksheet(user_name)
     user_sheet.append_row(["Username", "Password", "Date Joined"])
-    user_sheet.append_row([user_name, user_pass, str(datetime.datetime.now().date())])
+    user_sheet.append_row(
+        [user_name, user_pass, str(datetime.datetime.now().date())])
+
+    user_dashboard()
+
+
+def user_dashboard():
+    """
+    This function serves as the user dashboard for the user once they are 
+    logged in. The user can decide to add/update/delete a book, view their 
+    books or log out from system.
+    """
+    print("Welcome to your User Dashboard!\n")
+
+    while True:
+        user_input = input(
+            "Press 'B' to view your books, 'A' to add a book, or 'X' to logout:\n")
+        if user_input == 'X':
+            print("You are now logged out")
+            init()
+            break
+        if user_input == 'B':
+            view_all_books()
+            break
+        if user_input == 'A':
+            add_book()
+            break
+        else:
+            print("Invalid choice, please type B, A or X!")
+
+
+def view_all_books():
+    print("In view all books function")
+
+
+def add_book():
+    print("In add book function")
 
 
 def init():
