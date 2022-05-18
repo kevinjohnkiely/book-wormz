@@ -27,7 +27,6 @@ def authenticate_user(user_name, user_pass):
     This function takes the user details and checks them against those stored
     in the google sheet for valid values.
     """
-    print(user_name, user_pass)
     # get list of current usernames from sheet
     worksheet_objs = SHEET.worksheets()
     username_list = []
@@ -53,10 +52,20 @@ def check_password(user_name, user_pass):
         return True
     return False
 
+
 def check_username(user_name):
     """
     Utility function that checks if chosen username already exists in sheet
     """
+    # get list of current usernames from sheet
+    worksheet_objs = SHEET.worksheets()
+    username_list = []
+    for worksheet in worksheet_objs:
+        username_list.append(worksheet.title)
+
+    if user_name in username_list:
+        return True
+    return False
 
 
 def user_login():
@@ -96,7 +105,7 @@ def user_register():
     """
     while True:
         user_name = input('Please choose a username (4-10 characters):\n')
-        user_name_exists = True
+        user_name_exists = check_username(user_name)
 
         if len(user_name) > 3 and len(user_name) < 11 and not user_name_exists:
             break
