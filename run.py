@@ -104,8 +104,18 @@ def view_all_books(user_name, user_book_data):
     message telling user that they have no books added yet. From this
     list the user can select a book for further actions such as edit or delete.
     """
-    if(user_book_data):
+    if user_book_data:
         print(tabulate(user_book_data))
+        while True:
+            user_input = input("Would you like to edit or delete a book? Press E to edit, or D to delete\n")
+
+            if user_input == 'E':
+                edit_book()
+                break
+            if user_input == 'D':
+                delete_book()
+                break
+            print("Invalid choice, please try again")
     else:
         print("You have no books added yet!")
         user_dashboard(user_name)
@@ -137,6 +147,15 @@ def add_book(user_name, user_data, user_book_data):
     user_data.append_row(book_data)
     
     user_dashboard(user_name)
+
+
+def edit_book():
+    print("In edit book function")
+    
+
+def delete_book():
+    print("In delete book funtion")
+
 
 # UTILITY FUNCTIONS
 
