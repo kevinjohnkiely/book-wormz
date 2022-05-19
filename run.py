@@ -57,12 +57,16 @@ def user_register():
 
     print(f"You are signed up & logged in as user {user_name}!")
 
-    # Write valid user detais to new sheet and populate rows
+    # Write valid user details to new sheet and populate rows
     SHEET.add_worksheet(title=user_name, rows="100", cols="20")
     user_sheet = SHEET.worksheet(user_name)
     user_sheet.append_row(["Username", "Password", "Date Joined"])
+    user_sheet.format('A1:C1', {'textFormat': {'bold': True}})
     user_sheet.append_row(
         [user_name, user_pass, str(datetime.datetime.now().date())])
+    user_sheet.append_row([" ", " ", " ", " "])
+    user_sheet.append_row(["Book ID", "Book Title", "Author", "Category"])
+    user_sheet.format('A3:D3', {'textFormat': {'bold': True}})
 
     user_dashboard(user_name)
 
@@ -76,7 +80,7 @@ def user_dashboard(user_name):
     print(f"Welcome to your User Dashboard, {user_name}!\n")
     # Get all user data for this username
     user_data = SHEET.worksheet(user_name)
-    user_book_data = user_data.get_all_values()[4:]
+    user_book_data = user_data.get_all_values()[3:]
 
     while True:
         user_input = input(
@@ -89,17 +93,16 @@ def user_dashboard(user_name):
             view_all_books(user_name, user_book_data)
             break
         if user_input == 'A':
-            add_book()
+            add_book(user_name, user_data, user_book_data)
             break
-        else:
-            print("Invalid choice, please type B, A or X!")
+        print("Invalid choice, please type B, A or X!")
 
 
 def view_all_books(user_name, user_book_data):
     """
-    This function displays all the users books if they request, or a message telling user
-    that they have no books added yet. From this list the user can select a book for 
-    further actions such as edit or delete.
+    This function displays all the users books if they request, or a
+    message telling user that they have no books added yet. From this
+    list the user can select a book for further actions such as edit or delete.
     """
     if(user_book_data):
         print(tabulate(user_book_data))
@@ -108,13 +111,14 @@ def view_all_books(user_name, user_book_data):
         user_dashboard(user_name)
 
 
-def add_book():
+def add_book(user_name, user_data, user_book_data):
     """
-    This function takes the user input and creates a new record in the sheet relating
-    to the users chosen book details 
+    This function takes the user input and creates a new record \
+         in the sheet relating to the users chosen book details
     """
     while True:
-        print("Please add book details in the following format of comma separated values")
+        print("Please add book details in the following format \
+        of comma separated values")
         print("Book Title,Author,Category")
         print("Example: The 2 Towers,JRR Tolkien,Fantasy")
 
@@ -125,6 +129,14 @@ def add_book():
         if validate_book_data(book_data):
             print("Data is in correct format!")
             break
+
+    # Assign book ID
+    new_book_id = assign_book_id(user_book_data)
+    book_data.insert(0, new_book_id)
+
+    user_data.append_row(book_data)
+    
+    user_dashboard(user_name)
 
 # UTILITY FUNCTIONS
 
@@ -141,7 +153,7 @@ def validate_login_input(input_name):
             return user_input_field
             # break
         if len(user_input_field) == 0:
-            print("Username cannot be empty, try again!")
+            print(f"{input_name} cannot be empty, try again!")
 
 
 def validate_signup_input(input_name):
@@ -154,16 +166,16 @@ def validate_signup_input(input_name):
         user_name_exists = check_username(user_input_field)
 
         if len(user_input_field) > 3 and len(user_input_field) < 11 and not user_name_exists:
-            print(f"Your username {user_input_field} is valid!")
+            print(f"Your {input_name} {user_input_field} is valid!")
             return user_input_field
         if user_name_exists:
-            print("Username already exists! Please pick another")
+            print(f"{input_name} already exists! Please pick another")
         if len(user_input_field) > 0 and len(user_input_field) < 4:
-            print("Username is too short! Try again")
+            print(f"{input_name} is too short! Try again")
         if len(user_input_field) > 10:
-            print("Username is too long! Try again")
+            print(f"{input_name} is too long! Try again")
         if len(user_input_field) == 0:
-            print("Username cannot be empty, try again!")
+            print(f"{input_name} cannot be empty, try again!")
 
 
 def authenticate_user(user_name, user_pass):
@@ -223,13 +235,26 @@ def validate_book_data(book_data):
     try:
         if len(book_data) != 3:
             raise ValueError(
-                f"3 values required (Book title, author, category), but you provided {len(book_data)}"
+                f"3 values required (Book title, author, category), \
+                     but you provided {len(book_data)}"
             )
     except ValueError as err:
         print(f"Invalid data entered: {err}, please try again.\n")
         return False
 
     return True
+
+
+def assign_book_id(user_book_data):
+    """
+    This function either sets new ID of 1 for a new book if no books are present,
+    or increments the ID of the last book in the users records, to ensure there are
+    no clashes of ID numbers
+    """
+    if not user_book_data:
+        return 1
+    else:
+        return int(user_book_data[-1][0]) + 1
 
 
 def init():
