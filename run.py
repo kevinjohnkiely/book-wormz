@@ -31,7 +31,7 @@ def user_login():
 
         if authenticate_user(user_name, user_pass):
             print(f"You are logged in as user {user_name}!")
-            user_dashboard()
+            user_dashboard(user_name)
             break
 
         print("Your details are incorrect, please try again!")
@@ -42,34 +42,8 @@ def user_register():
     This function takes the users input details, and enters their details
     into a dedicated sheet for that user in the google sheet.
     """
-    while True:
-        user_name = input('Please choose a username (4-10 characters):\n')
-        user_name_exists = check_username(user_name)
-
-        if len(user_name) > 3 and len(user_name) < 11 and not user_name_exists:
-            print(f"Your username {user_name} is valid!")
-            break
-        if user_name_exists:
-            print("Username already exists! Please pick another")
-        if len(user_name) > 0 and len(user_name) < 4:
-            print("Username is too short! Try again")
-        if len(user_name) > 10:
-            print("Username is too long! Try again")
-        if len(user_name) == 0:
-            print("Username cannot be empty, try again!")
-
-    while True:
-        user_pass = input('Please choose a password (4-10 characters):\n')
-
-        if len(user_pass) > 3 and len(user_pass) < 11:
-            print(f"Your password {user_pass} is valid!")
-            break
-        if len(user_pass) > 0 and len(user_pass) < 4:
-            print("Password is too short! Try again")
-        if len(user_pass) > 10:
-            print("Password is too long! Try again")
-        if len(user_pass) == 0:
-            print("Password cannot be empty, try again!")
+    user_name = validate_signup_input("username")
+    user_pass = validate_signup_input("password")
 
     while True:
         user_pass_confirm = input("Please confirm your password:\n")
@@ -89,16 +63,16 @@ def user_register():
     user_sheet.append_row(
         [user_name, user_pass, str(datetime.datetime.now().date())])
 
-    user_dashboard()
+    user_dashboard(user_name)
 
 
-def user_dashboard():
+def user_dashboard(user_name):
     """
     This function serves as the user dashboard for the user once they are 
     logged in. The user can decide to add/update/delete a book, view their 
     books or log out from system.
     """
-    print("Welcome to your User Dashboard!\n")
+    print(f"Welcome to your User Dashboard, {user_name}!\n")
 
     while True:
         user_input = input(
@@ -108,7 +82,7 @@ def user_dashboard():
             init()
             break
         if user_input == 'B':
-            view_all_books()
+            view_all_books(user_name)
             break
         if user_input == 'A':
             add_book()
@@ -117,8 +91,14 @@ def user_dashboard():
             print("Invalid choice, please type B, A or X!")
 
 
-def view_all_books():
+def view_all_books(user_name):
+    """
+    This function displays all the users books if they request, or a message telling user
+    that they have no books added yet. From this list the user can select a book for 
+    further actions such as edit or delete.
+    """
     print("In view all books function")
+    print(user_name)
 
 
 def add_book():
@@ -138,6 +118,28 @@ def validate_login_input(input_name):
         if len(user_input_field) > 0:
             return user_input_field
             # break
+        if len(user_input_field) == 0:
+            print("Username cannot be empty, try again!")
+
+
+def validate_signup_input(input_name):
+    """
+    This function validates the user input for the signup functionality, so that
+    the user cannot submit empty values
+    """
+    while True:
+        user_input_field = input(f'Please choose a {input_name} (4-10 characters):\n')
+        user_name_exists = check_username(user_input_field)
+
+        if len(user_input_field) > 3 and len(user_input_field) < 11 and not user_name_exists:
+            print(f"Your username {user_input_field} is valid!")
+            return user_input_field
+        if user_name_exists:
+            print("Username already exists! Please pick another")
+        if len(user_input_field) > 0 and len(user_input_field) < 4:
+            print("Username is too short! Try again")
+        if len(user_input_field) > 10:
+            print("Username is too long! Try again")
         if len(user_input_field) == 0:
             print("Username cannot be empty, try again!")
 
