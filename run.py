@@ -114,9 +114,9 @@ def add_book():
     to the users chosen book details 
     """
     while True:
-        print("Please add book details in the following format of comma separated values:\n")
-        print("Book Title,Author,Category\n")
-        print("Example: The 2 Towers,JRR Tolkien,Fantasy\n")
+        print("Please add book details in the following format of comma separated values")
+        print("Book Title,Author,Category")
+        print("Example: The 2 Towers,JRR Tolkien,Fantasy")
 
         book_input_string = input("Enter book details:\n")
 
@@ -219,6 +219,16 @@ def validate_book_data(book_data):
     """
     print("In validate book data function")
     print(book_data)
+
+    try:
+        if len(book_data) != 3:
+            raise ValueError(
+                f"3 values required (Book title, author, category), but you provided {len(book_data)}"
+            )
+    except ValueError as err:
+        print(f"Invalid data entered: {err}, please try again.\n")
+        return False
+
     return True
 
 
