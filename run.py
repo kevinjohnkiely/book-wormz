@@ -2,6 +2,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import datetime
 import pyfiglet
+from tabulate import tabulate
 
 # Setup the connection and authorizations between application and google sheets
 SCOPE = [
@@ -73,6 +74,9 @@ def user_dashboard(user_name):
     books or log out from system.
     """
     print(f"Welcome to your User Dashboard, {user_name}!\n")
+    # Get all user data for this username
+    user_data = SHEET.worksheet(user_name)
+    user_book_data = user_data.get_all_values()[4:]
 
     while True:
         user_input = input(
@@ -82,7 +86,7 @@ def user_dashboard(user_name):
             init()
             break
         if user_input == 'B':
-            view_all_books(user_name)
+            view_all_books(user_name, user_book_data)
             break
         if user_input == 'A':
             add_book()
@@ -91,14 +95,14 @@ def user_dashboard(user_name):
             print("Invalid choice, please type B, A or X!")
 
 
-def view_all_books(user_name):
+def view_all_books(user_name, user_book_data):
     """
     This function displays all the users books if they request, or a message telling user
     that they have no books added yet. From this list the user can select a book for 
     further actions such as edit or delete.
     """
     print("In view all books function")
-    print(user_name)
+    print(tabulate(user_book_data))
 
 
 def add_book():
