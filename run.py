@@ -101,12 +101,30 @@ def view_all_books(user_name, user_book_data):
     that they have no books added yet. From this list the user can select a book for 
     further actions such as edit or delete.
     """
-    print("In view all books function")
-    print(tabulate(user_book_data))
+    if(user_book_data):
+        print(tabulate(user_book_data))
+    else:
+        print("You have no books added yet!")
+        user_dashboard(user_name)
 
 
 def add_book():
-    print("In add book function")
+    """
+    This function takes the user input and creates a new record in the sheet relating
+    to the users chosen book details 
+    """
+    while True:
+        print("Please add book details in the following format of comma separated values:\n")
+        print("Book Title,Author,Category\n")
+        print("Example: The 2 Towers,JRR Tolkien,Fantasy\n")
+
+        book_input_string = input("Enter book details:\n")
+
+        book_data = book_input_string.split(",")
+
+        if validate_book_data(book_data):
+            print("Data is in correct format!")
+            break
 
 # UTILITY FUNCTIONS
 
@@ -192,6 +210,16 @@ def check_username(user_name):
     if user_name in username_list:
         return True
     return False
+
+
+def validate_book_data(book_data):
+    """
+    This utility function takes the user input of comma separated values
+    and determines if it is in the correct format for sending to the sheet
+    """
+    print("In validate book data function")
+    print(book_data)
+    return True
 
 
 def init():
