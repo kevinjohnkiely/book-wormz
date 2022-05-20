@@ -73,8 +73,8 @@ def user_register():
 
 def user_dashboard(user_name):
     """
-    This function serves as the user dashboard for the user once they are 
-    logged in. The user can decide to add/update/delete a book, view their 
+    This function serves as the user dashboard for the user once they are
+    logged in. The user can decide to add/update/delete a book, view their
     books or log out from system.
     """
     print(f"Welcome to your User Dashboard, {user_name}!\n")
