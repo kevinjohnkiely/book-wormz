@@ -169,7 +169,8 @@ def delete_book(user_data, user_book_data):
                     new_list_of_books.append(book)
             print(new_list_of_books)
             # Clear book records in sheet
-            user_data.delete_rows(4, 4)
+            for i in range(4, len(user_book_data) + 4):
+                user_data.update(f'A{i}:D{i}', [[" ", " ", " ", " "]])
             # Write new list back to sheet
             for book in new_list_of_books:
                 user_data.append_row(book)
