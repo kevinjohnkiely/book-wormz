@@ -113,7 +113,7 @@ def view_all_books(user_name, user_book_data):
                 edit_book()
                 break
             if user_input == 'D':
-                delete_book()
+                delete_book(user_book_data)
                 break
             print("Invalid choice, please try again")
     else:
@@ -153,9 +153,19 @@ def edit_book():
     print("In edit book function")
     
 
-def delete_book():
-    print("In delete book funtion")
-
+def delete_book(user_book_data):
+    """
+    This function takes an ID relating to a book selected by the user and
+    deletes that record from the google sheet.
+    """
+    while True:
+        user_input_id = int(input("Please select book ID from above list:\n"))
+        if check_book_id(user_book_data, user_input_id):
+            # if 6 > 3:
+            print(f"Book id to be deleted is {user_input_id}")
+            break
+        print("That book ID does not exist! Please try another")
+    
 
 # UTILITY FUNCTIONS
 
@@ -262,6 +272,21 @@ def validate_book_data(book_data):
         return False
 
     return True
+
+
+def check_book_id(data, book_id):
+    """
+    This utility function checks that the book ID that the user selected exists
+    in their lists of books.
+    """
+    book_ids = []
+    for book in data:
+        book_ids.append(int(book[0]))
+
+    if book_id in book_ids:
+        print("the ids match")
+        return True
+    return False
 
 
 def assign_book_id(user_book_data):
