@@ -90,7 +90,7 @@ def user_dashboard(user_name):
             init()
             break
         if user_input == 'B':
-            view_all_books(user_name, user_book_data)
+            view_all_books(user_data, user_name, user_book_data)
             break
         if user_input == 'A':
             add_book(user_name, user_data, user_book_data)
@@ -98,7 +98,7 @@ def user_dashboard(user_name):
         print("Invalid choice, please type B, A or X!")
 
 
-def view_all_books(user_name, user_book_data):
+def view_all_books(user_data, user_name, user_book_data):
     """
     This function displays all the users books if they request, or a
     message telling user that they have no books added yet. From this
@@ -113,7 +113,7 @@ def view_all_books(user_name, user_book_data):
                 edit_book()
                 break
             if user_input == 'D':
-                delete_book(user_book_data)
+                delete_book(user_data, user_book_data)
                 break
             print("Invalid choice, please try again")
     else:
@@ -153,7 +153,7 @@ def edit_book():
     print("In edit book function")
     
 
-def delete_book(user_book_data):
+def delete_book(user_data, user_book_data):
     """
     This function takes an ID relating to a book selected by the user and
     deletes that record from the google sheet.
@@ -161,8 +161,18 @@ def delete_book(user_book_data):
     while True:
         user_input_id = int(input("Please select book ID from above list:\n"))
         if check_book_id(user_book_data, user_input_id):
-            # if 6 > 3:
             print(f"Book id to be deleted is {user_input_id}")
+            # delete the book from data list in memory
+            new_list_of_books = []
+            for book in user_book_data:
+                if int(book[0]) != user_input_id:
+                    new_list_of_books.append(book)
+            print(new_list_of_books)
+            # Clear book records in sheet
+            user_data.delete_rows(4, 4)
+            # Write new list back to sheet
+            for book in new_list_of_books:
+                user_data.append_row(book)
             break
         print("That book ID does not exist! Please try another")
     
