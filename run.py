@@ -107,8 +107,11 @@ def view_all_books(user_data, user_name, user_book_data):
     if user_book_data:
         print(tabulate(user_book_data))
         while True:
-            user_input = input("Would you like to edit or delete a book? Press E to edit, or D to delete\n")
+            print("Need to change book details?")
+            user_input = input("Press E to edit, D to delete, or R to return to dashboard\n")
 
+            if user_input == 'R':
+                user_dashboard(user_name)
             if user_input == 'E':
                 edit_book()
                 break
