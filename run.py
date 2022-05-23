@@ -116,7 +116,7 @@ def view_all_books(user_data, user_name, user_book_data):
                 edit_book()
                 break
             if user_input == 'D':
-                delete_book(user_data, user_book_data)
+                delete_book(user_data, user_book_data, user_name)
                 break
             print("Invalid choice, please try again")
     else:
@@ -156,7 +156,7 @@ def edit_book():
     print("In edit book function")
     
 
-def delete_book(user_data, user_book_data):
+def delete_book(user_data, user_book_data, user_name):
     """
     This function takes an ID relating to a book selected by the user and
     deletes that record from the google sheet.
@@ -169,14 +169,25 @@ def delete_book(user_data, user_book_data):
             new_list_of_books = []
             for book in user_book_data:
                 if int(book[0]) != user_input_id:
+                    # Id number is read back into app as string
+                    # so this converts back into integer
+                    new_int_book_id = int(book[0])
+                    book.pop(0)
+                    # book.append(new_int_book_id)
+                    book.insert(0, new_int_book_id)
                     new_list_of_books.append(book)
-            print(new_list_of_books)
+            print(f" new list of books is : f{new_list_of_books}")
+            print(f"and id is {type(new_list_of_books[0][0])}")
             # Clear book records in sheet
-            for i in range(4, len(user_book_data) + 4):
-                user_data.update(f'A{i}:D{i}', [[" ", " ", " ", " "]])
+            # for i in range(4, len(user_book_data) + 4):
+            #     user_data.update(f'A{i}:D{i}', [["", "", "", ""]])
+            user_data.delete_rows(4, 20)
             # Write new list back to sheet
             for book in new_list_of_books:
                 user_data.append_row(book)
+
+            view_all_books(user_data, user_name, user_book_data)
+
             break
         print("That book ID does not exist! Please try another")
     
@@ -294,6 +305,7 @@ def check_book_id(data, book_id):
     in their lists of books.
     """
     book_ids = []
+    print(f" the data is ....{data}")
     for book in data:
         book_ids.append(int(book[0]))
 
