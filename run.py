@@ -154,7 +154,7 @@ def add_book(user_name, user_data, user_book_data):
 
 def edit_book():
     print("In edit book function")
-    
+
 
 def delete_book(user_data, user_book_data, user_name):
     """
@@ -162,13 +162,13 @@ def delete_book(user_data, user_book_data, user_name):
     deletes that record from the google sheet.
     """
     while True:
-        user_input_id = int(input("Please select book ID from above list:\n"))
-        if check_book_id(user_book_data, user_input_id):
+        user_input_id = input("Please select book ID from above list:\n")
+        if user_input_id.isdigit() and check_book_id(user_book_data, user_input_id):
             print(f"Book id to be deleted is {user_input_id}")
             # delete the book from data list in memory
             new_list_of_books = []
             for book in user_book_data:
-                if int(book[0]) != user_input_id:
+                if int(book[0]) != int(user_input_id):
                     # Id number is read back into app as string
                     # so this converts back into integer
                     new_int_book_id = int(book[0])
@@ -176,8 +176,8 @@ def delete_book(user_data, user_book_data, user_name):
                     # book.append(new_int_book_id)
                     book.insert(0, new_int_book_id)
                     new_list_of_books.append(book)
-            print(f" new list of books is : f{new_list_of_books}")
-            print(f"and id is {type(new_list_of_books[0][0])}")
+            # print(f" new list of books is : f{new_list_of_books}")
+            # print(f"and id is {type(new_list_of_books[0][0])}")
             # Clear book records in sheet
             # for i in range(4, len(user_book_data) + 4):
             #     user_data.update(f'A{i}:D{i}', [["", "", "", ""]])
@@ -186,7 +186,9 @@ def delete_book(user_data, user_book_data, user_name):
             for book in new_list_of_books:
                 user_data.append_row(book)
 
-            view_all_books(user_data, user_name, user_book_data)
+            # view_all_books(user_data, user_name, user_book_data)
+            print("Book deleted! Returning to your dashboard")
+            user_dashboard(user_name)
 
             break
         print("That book ID does not exist! Please try another")
@@ -305,11 +307,11 @@ def check_book_id(data, book_id):
     in their lists of books.
     """
     book_ids = []
-    print(f" the data is ....{data}")
+
     for book in data:
         book_ids.append(int(book[0]))
 
-    if book_id in book_ids:
+    if int(book_id) in book_ids:
         print("the ids match")
         return True
     return False
