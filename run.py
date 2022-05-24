@@ -105,7 +105,8 @@ def view_all_books(user_data, user_name, user_book_data):
     list the user can select a book for further actions such as edit or delete.
     """
     if user_book_data:
-        print(tabulate(user_book_data))
+        print(tabulate(user_book_data, 
+        headers=["ID", "Book Name", "Author", "Category", "Wishlist", "Rating (1-5)"]))
         while True:
             print("Need to change book details?")
             user_input = input("Press E to edit, D to delete, or R to return to dashboard\n")
