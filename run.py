@@ -115,7 +115,7 @@ def view_all_books(user_data, user_name, user_book_data):
             if user_input == 'R':
                 user_dashboard(user_name)
             if user_input == 'E':
-                edit_book()
+                edit_book(user_data, user_book_data, user_name)
                 break
             if user_input == 'D':
                 delete_book(user_data, user_book_data, user_name)
@@ -145,12 +145,13 @@ def add_book(user_name, user_data, user_book_data):
                     rating_input = input("Please rate book out of 5:\n")
                     if rating_input.isdigit():
                         if int(rating_input) > 0 and int(rating_input) < 6:
-                            book_data = book_data + [True, rating_input]
+                            book_data = book_data + [True, int(rating_input)]
                             break
                     print("Please add a whole number between 1 and 5!")
                 break
             if wish_list_input == 'N':
                 # print("Book added to your records!")
+                book_data = book_data + [False, 0]
                 break
             print("Invalid choice! Please choose Y or N")
 
@@ -170,11 +171,48 @@ def add_book(user_name, user_data, user_book_data):
     user_dashboard(user_name)
 
 
-def edit_book():
+def edit_book(user_data, user_book_data, user_name):
     """
     This function takes an ID relating to a book selected by the user and
     edits details of that record from the google sheet.
     """
+    while True:
+        user_input_id = input("Please select book ID from above list:\n")
+        if user_input_id.isdigit() and check_book_id(user_book_data, user_input_id):
+            print(f"Book id to be edited is {user_input_id}")
+            # TEMP values before I put input !!!
+            new_rating = int(5)
+            new_wishlist = bool(False)
+
+            new_list_of_books = []
+            for book in user_book_data:
+                # new_int_book_id = int(book[0])
+                # new_book_wishlist = bool(book[4])
+                # new_book_rating = int(book[5])
+
+                # book.pop(0)
+                # book.insert(0, new_int_book_id)
+                # book[4] = new_book_wishlist
+                # book[5] = new_book_rating
+                book[0] = int(book[0])
+                book[4] = bool(book[4])
+                book[5] = int(book[5])
+
+                new_list_of_books.append(book)
+                if int(book[0]) == int(user_input_id):
+                    book[4] = new_wishlist
+                    book[5] = new_rating
+            
+            user_data.delete_rows(4, 20)
+            # Write new list back to sheet
+            for book in new_list_of_books:
+                user_data.append_row(book)
+
+            print("Book updated! Returning to your dashboard")
+            user_dashboard(user_name)
+
+            break
+        print("That book ID does not exist! Please try another")
 
 
 def delete_book(user_data, user_book_data, user_name):
@@ -194,18 +232,16 @@ def delete_book(user_data, user_book_data, user_name):
                     # so this converts back into integer
                     new_int_book_id = int(book[0])
                     book.pop(0)
-                    # book.append(new_int_book_id)
+                    
                     book.insert(0, new_int_book_id)
                     new_list_of_books.append(book)
-            # print(f" new list of books is : f{new_list_of_books}")
-            # print(f"and id is {type(new_list_of_books[0][0])}")
-            # Clear book records in sheet
-            # for i in range(4, len(user_book_data) + 4):
-            #     user_data.update(f'A{i}:D{i}', [["", "", "", ""]])
+            
             user_data.delete_rows(4, 20)
             # Write new list back to sheet
             for book in new_list_of_books:
                 user_data.append_row(book)
+
+            # user_data.add_rows(1)
 
             # view_all_books(user_data, user_name, user_book_data)
             print("Book deleted! Returning to your dashboard")
