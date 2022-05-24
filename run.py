@@ -16,7 +16,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('BookWormz')
 
-ascii_banner = pyfiglet.figlet_format(">>> BOOK-WORMZ <<<")
+ascii_banner = pyfiglet.figlet_format("><> BOOK-WORMZ <><")
 print(ascii_banner)
 
 
@@ -138,6 +138,22 @@ def add_book(user_name, user_data, user_book_data):
             user_input = input(f"Please add book {label}:\n")
             book_data.append(user_input)
 
+        while True:
+            wish_list_input = input("Have you read this book? Y or N:\n")
+            if wish_list_input == 'Y':
+                while True:
+                    rating_input = input("Please rate book out of 5:\n")
+                    if rating_input.isdigit():
+                        if int(rating_input) > 0 and int(rating_input) < 6:
+                            book_data = book_data + [True, rating_input]
+                            break
+                    print("Please add a whole number between 1 and 5!")
+                break
+            if wish_list_input == 'N':
+                # print("Book added to your records!")
+                break
+            print("Invalid choice! Please choose Y or N")
+
         if "" not in book_data:
             print("Data is valid!")
             break
@@ -155,7 +171,10 @@ def add_book(user_name, user_data, user_book_data):
 
 
 def edit_book():
-    print("In edit book function")
+    """
+    This function takes an ID relating to a book selected by the user and
+    edits details of that record from the google sheet.
+    """
 
 
 def delete_book(user_data, user_book_data, user_name):
