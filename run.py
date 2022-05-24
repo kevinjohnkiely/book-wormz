@@ -105,11 +105,12 @@ def view_all_books(user_data, user_name, user_book_data):
     list the user can select a book for further actions such as edit or delete.
     """
     if user_book_data:
-        print(tabulate(user_book_data, 
-        headers=["ID", "Book Name", "Author", "Category", "Wishlist", "Rating (1-5)"]))
+        print(tabulate(user_book_data,
+                       headers=["ID", "Book Name", "Author", "Category", "Wishlist", "Rating (1-5)"]))
         while True:
             print("Need to change book details?")
-            user_input = input("Press E to edit, D to delete, or R to return to dashboard\n")
+            user_input = input(
+                "Press E to edit, D to delete, or R to return to dashboard\n")
 
             if user_input == 'R':
                 user_dashboard(user_name)
@@ -131,25 +132,25 @@ def add_book(user_name, user_data, user_book_data):
          in the sheet relating to the users chosen book details
     """
     while True:
-        print("Please add book details in the following format \
-        of comma separated values")
-        print("Book Title,Author,Category")
-        print("Example: The 2 Towers,JRR Tolkien,Fantasy")
+        book_data = []
+        book_prompt_labels = ["title", "author", "category"]
+        for label in book_prompt_labels:
+            user_input = input(f"Please add book {label}:\n")
+            book_data.append(user_input)
 
-        book_input_string = input("Enter book details:\n")
-
-        book_data = book_input_string.split(",")
-
-        if validate_book_data(book_data):
-            print("Data is in correct format!")
+        if "" not in book_data:
+            print("Data is valid!")
             break
+        print("You entered empty values! Please try again")
+
+    print(f"book_data is {book_data}")
 
     # Assign book ID
     new_book_id = assign_book_id(user_book_data)
     book_data.insert(0, new_book_id)
 
     user_data.append_row(book_data)
-    
+
     user_dashboard(user_name)
 
 
@@ -193,7 +194,7 @@ def delete_book(user_data, user_book_data, user_name):
 
             break
         print("That book ID does not exist! Please try another")
-    
+
 
 # UTILITY FUNCTIONS
 
@@ -219,7 +220,8 @@ def validate_signup_input(input_name):
     the user cannot submit empty values
     """
     while True:
-        user_input_field = input(f'Please choose a {input_name} (4-10 characters):\n')
+        user_input_field = input(
+            f'Please choose a {input_name} (4-10 characters):\n')
         user_name_exists = check_username(user_input_field)
 
         if len(user_input_field) > 3 and len(user_input_field) < 11 and not user_name_exists:
@@ -279,27 +281,6 @@ def check_username(user_name):
     if user_name in username_list:
         return True
     return False
-
-
-def validate_book_data(book_data):
-    """
-    This utility function takes the user input of comma separated values
-    and determines if it is in the correct format for sending to the sheet
-    """
-    print("In validate book data function")
-    print(book_data)
-
-    try:
-        if len(book_data) != 3:
-            raise ValueError(
-                f"3 values required (Book title, author, category), \
-                     but you provided {len(book_data)}"
-            )
-    except ValueError as err:
-        print(f"Invalid data entered: {err}, please try again.\n")
-        return False
-
-    return True
 
 
 def check_book_id(data, book_id):
