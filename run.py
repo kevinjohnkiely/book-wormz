@@ -1,6 +1,6 @@
+import datetime
 import gspread
 from google.oauth2.service_account import Credentials
-import datetime
 import pyfiglet
 from tabulate import tabulate
 
@@ -84,15 +84,15 @@ def user_dashboard(user_name):
 
     while True:
         user_input = input(
-            "Press 'B' to view your books, 'A' to add a book, or 'X' to logout:\n")
-        if user_input == 'X':
+            "Press 'B' to view books, 'A' to add a book, or 'X' to logout:\n")
+        if user_input in {"X", "x"}:
             print("You are now logged out")
             init()
             break
-        if user_input == 'B':
+        if user_input in {"B", "b"}:
             view_all_books(user_data, user_name, user_book_data)
             break
-        if user_input == 'A':
+        if user_input in {"A", "a"}:
             add_book(user_name, user_data, user_book_data)
             break
         print("Invalid choice, please type B, A or X!")
@@ -105,19 +105,18 @@ def view_all_books(user_data, user_name, user_book_data):
     list the user can select a book for further actions such as edit or delete.
     """
     if user_book_data:
-        print(tabulate(user_book_data,
-                       headers=["ID", "Book Name", "Author", "Category", "Wishlist", "Rating (1-5)"]))
+        print(tabulate(user_book_data, headers=["ID", "Book Name", "Author", "Category", "Wishlist", "Rating (1-5)"]))
         while True:
             print("Need to change book details?")
             user_input = input(
                 "Press E to edit, D to delete, or R to return to dashboard\n")
 
-            if user_input == 'R':
+            if user_input in {"R", "r"}:
                 user_dashboard(user_name)
-            if user_input == 'E':
+            if user_input in {"E", "e"}:
                 edit_book(user_data, user_book_data, user_name)
                 break
-            if user_input == 'D':
+            if user_input in {"D", "d"}:
                 delete_book(user_data, user_book_data, user_name)
                 break
             print("Invalid choice, please try again")
@@ -140,7 +139,7 @@ def add_book(user_name, user_data, user_book_data):
 
         while True:
             wish_list_input = input("Have you read this book? Y or N:\n")
-            if wish_list_input == 'Y':
+            if wish_list_input in {"Y", "y"}:
                 while True:
                     rating_input = input("Please rate book out of 5:\n")
                     if rating_input.isdigit():
@@ -149,7 +148,7 @@ def add_book(user_name, user_data, user_book_data):
                             break
                     print("Please add a whole number between 1 and 5!")
                 break
-            if wish_list_input == 'N':
+            if wish_list_input in {"N", "n"}:
                 # print("Book added to your records!")
                 book_data = book_data + [False, 0]
                 break
@@ -184,7 +183,7 @@ def edit_book(user_data, user_book_data, user_name):
             print(f"Book id to be edited is {user_input_id}")
             while True:
                 new_wishlist = input("Have you read this book? Y or N:\n")
-                if new_wishlist == 'Y':
+                if new_wishlist in {"Y", "n"}:
                     while True:
                         new_rating = input("Please rate book out of 5:\n")
                         if new_rating.isdigit():
@@ -194,7 +193,7 @@ def edit_book(user_data, user_book_data, user_name):
                                 break
                         print("Please add a whole number between 1 and 5!")
                     break
-                if new_wishlist == 'N':
+                if new_wishlist in {"N", "n"}:
                     # print("Book added to your records!")
                     book_data.append(bool(False))
                     book_data.append(int(0))
@@ -214,8 +213,6 @@ def edit_book(user_data, user_book_data, user_name):
                 if int(book[0]) == int(user_input_id):
                     book[4] = book_data[0]
                     book[5] = book_data[1]
-
-            # print(f"new list of books is {new_list_of_books}")
             
             user_data.delete_rows(4, 20)
             # Write new list back to sheet
@@ -393,13 +390,13 @@ def init():
     while True:
         user_input = input(
             "Press 'L' to login, or 'R' to register, or 'X' to quit:\n")
-        if user_input == 'L':
+        if user_input in {"L", "l"}:
             user_login()
             break
-        if user_input == 'R':
+        if user_input in {"R", "r"}:
             user_register()
             break
-        if user_input == 'X':
+        if user_input in {"X", "x"}:
             print("GOODBYE")
             quit()
         else:
