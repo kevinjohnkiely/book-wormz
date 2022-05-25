@@ -137,22 +137,7 @@ def add_book(user_name, user_data, user_book_data):
             user_input = input(f"Please add book {label}:\n")
             book_data.append(user_input)
 
-        while True:
-            wish_list_input = input("Have you read this book? Y or N:\n")
-            if wish_list_input in {"Y", "y"}:
-                while True:
-                    rating_input = input("Please rate book out of 5:\n")
-                    if rating_input.isdigit():
-                        if int(rating_input) > 0 and int(rating_input) < 6:
-                            book_data = book_data + [True, int(rating_input)]
-                            break
-                    print("Please add a whole number between 1 and 5!")
-                break
-            if wish_list_input in {"N", "n"}:
-                # print("Book added to your records!")
-                book_data = book_data + [False, 0]
-                break
-            print("Invalid choice! Please choose Y or N")
+        book_data = wishlist_and_rating_input(book_data)
 
         if "" not in book_data:
             print("Data is valid!")
@@ -181,32 +166,12 @@ def edit_book(user_data, user_book_data, user_name):
         if user_input_id.isdigit() and check_book_id(user_book_data, user_input_id):
 
             print(f"Book id to be edited is {user_input_id}")
-            while True:
-                new_wishlist = input("Have you read this book? Y or N:\n")
-                if new_wishlist in {"Y", "n"}:
-                    while True:
-                        new_rating = input("Please rate book out of 5:\n")
-                        if new_rating.isdigit():
-                            if int(new_rating) > 0 and int(new_rating) < 6:
-                                book_data.append(bool(True))
-                                book_data.append(int(new_rating))
-                                break
-                        print("Please add a whole number between 1 and 5!")
-                    break
-                if new_wishlist in {"N", "n"}:
-                    # print("Book added to your records!")
-                    book_data.append(bool(False))
-                    book_data.append(int(0))
-                    break
-                print("Invalid choice! Please choose Y or N")
+            book_data = wishlist_and_rating_input(book_data)
 
-            # print(f"boook list is {user_book_data}")
-            # print(f"boook data is {book_data}")
             new_list_of_books = []
             for book in user_book_data:
                 book[0] = int(book[0])
                 book[4] = True if book[4] == 'TRUE' else False
-                # book[4] = bool(book[4])
                 book[5] = int(book[5])
 
                 new_list_of_books.append(book)
@@ -278,7 +243,6 @@ def validate_login_input(input_name):
 
         if len(user_input_field) > 0:
             return user_input_field
-            # break
         if len(user_input_field) == 0:
             print(f"{input_name} cannot be empty, try again!")
 
@@ -378,6 +342,30 @@ def assign_book_id(user_book_data):
         return 1
     else:
         return int(user_book_data[-1][0]) + 1
+
+
+def wishlist_and_rating_input(book_data):
+    """ 
+    This function lets the user add or edit details to the book record
+    pertaining to the books rating, and whether or not the user has read the book
+    or added it to their wishlist
+    """
+    while True:
+        wish_list_input = input("Have you read this book? Y or N:\n")
+        if wish_list_input in {"Y", "y"}:
+            while True:
+                rating_input = input("Please rate book out of 5:\n")
+                if rating_input.isdigit():
+                    if int(rating_input) > 0 and int(rating_input) < 6:
+                        book_data = book_data + [True, int(rating_input)]
+                        return book_data
+                print("Please add a whole number between 1 and 5!")
+            break
+        if wish_list_input in {"N", "n"}:
+            # print("Book added to your records!")
+            book_data = book_data + [False, 0]
+            return book_data
+        print("Invalid choice! Please choose Y or N")
 
 
 def init():
