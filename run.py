@@ -177,36 +177,51 @@ def edit_book(user_data, user_book_data, user_name):
     edits details of that record from the google sheet.
     """
     while True:
+        book_data = []
         user_input_id = input("Please select book ID from above list:\n")
         if user_input_id.isdigit() and check_book_id(user_book_data, user_input_id):
-            print(f"Book id to be edited is {user_input_id}")
-            # TEMP values before I put input !!!
-            new_rating = int(5)
-            new_wishlist = bool(False)
 
+            print(f"Book id to be edited is {user_input_id}")
+            while True:
+                new_wishlist = input("Have you read this book? Y or N:\n")
+                if new_wishlist == 'Y':
+                    while True:
+                        new_rating = input("Please rate book out of 5:\n")
+                        if new_rating.isdigit():
+                            if int(new_rating) > 0 and int(new_rating) < 6:
+                                book_data.append(bool(True))
+                                book_data.append(int(new_rating))
+                                break
+                        print("Please add a whole number between 1 and 5!")
+                    break
+                if new_wishlist == 'N':
+                    # print("Book added to your records!")
+                    book_data.append(bool(False))
+                    book_data.append(int(0))
+                    break
+                print("Invalid choice! Please choose Y or N")
+
+            # print(f"boook list is {user_book_data}")
+            # print(f"boook data is {book_data}")
             new_list_of_books = []
             for book in user_book_data:
-                # new_int_book_id = int(book[0])
-                # new_book_wishlist = bool(book[4])
-                # new_book_rating = int(book[5])
-
-                # book.pop(0)
-                # book.insert(0, new_int_book_id)
-                # book[4] = new_book_wishlist
-                # book[5] = new_book_rating
                 book[0] = int(book[0])
-                book[4] = bool(book[4])
+                book[4] = True if book[4] == 'TRUE' else False
+                # book[4] = bool(book[4])
                 book[5] = int(book[5])
 
                 new_list_of_books.append(book)
                 if int(book[0]) == int(user_input_id):
-                    book[4] = new_wishlist
-                    book[5] = new_rating
+                    book[4] = book_data[0]
+                    book[5] = book_data[1]
+
+            # print(f"new list of books is {new_list_of_books}")
             
             user_data.delete_rows(4, 20)
             # Write new list back to sheet
             for book in new_list_of_books:
                 user_data.append_row(book)
+            user_data.add_rows(1)
 
             print("Book updated! Returning to your dashboard")
             user_dashboard(user_name)
@@ -240,6 +255,8 @@ def delete_book(user_data, user_book_data, user_name):
             # Write new list back to sheet
             for book in new_list_of_books:
                 user_data.append_row(book)
+            
+            user_data.add_rows(1)
 
             # user_data.add_rows(1)
 
