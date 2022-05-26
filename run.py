@@ -105,7 +105,7 @@ def view_all_books(user_data, user_name, user_book_data):
     list the user can select a book for further actions such as edit or delete.
     """
     if user_book_data:
-        print(tabulate(user_book_data, headers=["ID", "Book Name", "Author", "Category", "Wishlist", "Rating (1-5)"]))
+        print(tabulate(user_book_data, headers=["ID", "Book Name", "Author", "Category", "Read list", "Rating (1-5)"]))
         while True:
             print("Need to change book details?")
             user_input = input(
@@ -137,7 +137,7 @@ def add_book(user_name, user_data, user_book_data):
             user_input = input(f"Please add book {label}:\n")
             book_data.append(user_input)
 
-        book_data = wishlist_and_rating_input(book_data)
+        book_data = readlist_and_rating_input(book_data)
 
         if "" not in book_data:
             print("Data is valid!")
@@ -163,7 +163,7 @@ def edit_book(user_data, user_book_data, user_name):
         user_input_id = input("Please select book ID from above list:\n")
         if user_input_id.isdigit() and check_book_id(user_book_data, user_input_id):
 
-            book_data = wishlist_and_rating_input(book_data)
+            book_data = readlist_and_rating_input(book_data)
 
             new_list_of_books = []
             for book in user_book_data:
@@ -336,15 +336,15 @@ def assign_book_id(user_book_data):
         return int(user_book_data[-1][0]) + 1
 
 
-def wishlist_and_rating_input(book_data):
+def readlist_and_rating_input(book_data):
     """
     This function lets the user add or edit details to the book record
     pertaining to the books rating, and whether or not the user has read the book
-    or added it to their wishlist
+    or added it to their read list
     """
     while True:
-        wish_list_input = input("Have you read this book? Y or N:\n")
-        if wish_list_input in {"Y", "y"}:
+        read_list_input = input("Have you read this book? Y or N:\n")
+        if read_list_input in {"Y", "y"}:
             while True:
                 rating_input = input("Please rate book out of 5:\n")
                 if rating_input.isdigit():
@@ -353,7 +353,7 @@ def wishlist_and_rating_input(book_data):
                         return book_data
                 print("Please add a whole number between 1 and 5!")
             break
-        if wish_list_input in {"N", "n"}:
+        if read_list_input in {"N", "n"}:
             book_data = book_data + [False, 0]
             return book_data
         print("Invalid choice! Please choose Y or N")
