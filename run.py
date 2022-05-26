@@ -77,7 +77,7 @@ def user_dashboard(user_name):
     logged in. The user can decide to add/update/delete a book, view their
     books or log out from system.
     """
-    print(f"Welcome to your User Dashboard, {user_name}!\n")
+    print(f"Welcome to your User Dashboard, {user_name}!")
     # Get all user data for this username
     user_data = SHEET.worksheet(user_name)
     user_book_data = user_data.get_all_values()[3:]
@@ -144,8 +144,6 @@ def add_book(user_name, user_data, user_book_data):
             break
         print("You entered empty values! Please try again")
 
-    print(f"book_data is {book_data}")
-
     # Assign book ID
     new_book_id = assign_book_id(user_book_data)
     book_data.insert(0, new_book_id)
@@ -165,7 +163,6 @@ def edit_book(user_data, user_book_data, user_name):
         user_input_id = input("Please select book ID from above list:\n")
         if user_input_id.isdigit() and check_book_id(user_book_data, user_input_id):
 
-            print(f"Book id to be edited is {user_input_id}")
             book_data = wishlist_and_rating_input(book_data)
 
             new_list_of_books = []
@@ -178,7 +175,6 @@ def edit_book(user_data, user_book_data, user_name):
                 if int(book[0]) == int(user_input_id):
                     book[4] = book_data[0]
                     book[5] = book_data[1]
-            
             user_data.delete_rows(4, 20)
             # Write new list back to sheet
             for book in new_list_of_books:
@@ -200,7 +196,6 @@ def delete_book(user_data, user_book_data, user_name):
     while True:
         user_input_id = input("Please select book ID from above list:\n")
         if user_input_id.isdigit() and check_book_id(user_book_data, user_input_id):
-            print(f"Book id to be deleted is {user_input_id}")
             # delete the book from data list in memory
             new_list_of_books = []
             for book in user_book_data:
@@ -209,15 +204,13 @@ def delete_book(user_data, user_book_data, user_name):
                     # so this converts back into integer
                     new_int_book_id = int(book[0])
                     book.pop(0)
-                    
                     book.insert(0, new_int_book_id)
                     new_list_of_books.append(book)
-            
+
             user_data.delete_rows(4, 20)
             # Write new list back to sheet
             for book in new_list_of_books:
                 user_data.append_row(book)
-            
             user_data.add_rows(1)
 
             # user_data.add_rows(1)
@@ -327,7 +320,6 @@ def check_book_id(data, book_id):
         book_ids.append(int(book[0]))
 
     if int(book_id) in book_ids:
-        print("the ids match")
         return True
     return False
 
@@ -345,7 +337,7 @@ def assign_book_id(user_book_data):
 
 
 def wishlist_and_rating_input(book_data):
-    """ 
+    """
     This function lets the user add or edit details to the book record
     pertaining to the books rating, and whether or not the user has read the book
     or added it to their wishlist
@@ -362,7 +354,6 @@ def wishlist_and_rating_input(book_data):
                 print("Please add a whole number between 1 and 5!")
             break
         if wish_list_input in {"N", "n"}:
-            # print("Book added to your records!")
             book_data = book_data + [False, 0]
             return book_data
         print("Invalid choice! Please choose Y or N")
@@ -373,7 +364,7 @@ def init():
     This function starts the application and asks the user for their
     first input
     """
-    print("WELCOME TO BOOKWORMZ! Add, manage and review your favourite books :)")
+    print("WELCOME TO BOOKWORMZ! Add, manage and review your favourite books")
 
     while True:
         user_input = input(
@@ -385,7 +376,7 @@ def init():
             user_register()
             break
         if user_input in {"X", "x"}:
-            print("GOODBYE")
+            print("GOODBYE! Thanks for visiting BookWormz")
             quit()
         else:
             print("Invalid choice, please type L, R or X!")
