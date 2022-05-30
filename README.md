@@ -85,6 +85,6 @@ There were a number of bugs which appeared during development of this applicatio
 
 To write the data from the application to the Google Sheet, I used the Gspread library to do so but however could not find any method within this package that would update or delete a spreadsheet row in the format that I wished. Thus, I decided to solve this by fetching all the records of the sheet into memory, wipe the spreadsheet book records, edit/delete the chosen record and then re-write the new data back into the spreadsheet. This eventually proved successful, but a formatting issue cropped up as seen in the following screenshot:
 
-<img src="https://github.com/kevinjohnkiely/book-wormz/blob/main/wireframesScreenshots/bug.jpg">
+<img src="https://github.com/kevinjohnkiely/book-wormz/blob/main/wireframesScreenshots/bugs.jpg">
 
 The data record for the "Read list" column should be a boolean value as that is how it was intially formatted, however reading the data back from the spreadsheet it returned as either 'TRUE' or 'FALSE', a string value. Through further investigation I discovered that any non-empty string evaluates as True, thus all the records switched the true values when some should have been false. I wrote a small piece of code to rectify this and solve the bug.
