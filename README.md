@@ -87,4 +87,19 @@ To write the data from the application to the Google Sheet, I used the Gspread l
 
 <img src="https://github.com/kevinjohnkiely/book-wormz/blob/main/wireframesScreenshots/bugs.jpg">
 
-The data record for the "Read list" column should be a boolean value as that is how it was intially formatted, however reading the data back from the spreadsheet it returned as either 'TRUE' or 'FALSE', a string value. Through further investigation I discovered that any non-empty string evaluates as True, thus all the records switched the true values when some should have been false. I wrote a small piece of code to rectify this and solve the bug.
+The data record for the "Read list" column should be a boolean value as that is how it was intially formatted, however reading the data back from the spreadsheet it returned as either 'TRUE' or 'FALSE', a string value. Through further investigation I discovered that any non-empty string evaluates as True, thus all the records switched to true values when some should have been false. I wrote a small piece of code to rectify this and solve the bug.
+
+## Deployment
+
+The following were the steps undertaken to deploy the project to Heroku:
+
++ In the gitpod terminal, run 'pip3 freeze > requirements.txt' to install dependancies such as gspread and google auth into the Heroku platform.
++ After login to Heroku account, create a new app.
++ Navigate to settings tab, and go to Reveal Config Vars button
++ Add 2 new Config vars, copy and paste the contents of Creds.json for the CREDS key, and enter value of 8000 for the PORT key.
++ Click "Add Buildpack" and add Python and Node.js in that order
++ Navigate to Deploy tab, choose Github and confirm connection to github account
++ Click Deploy Branch, and application is now deployed.
+
+
+## Credits
