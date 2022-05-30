@@ -103,3 +103,10 @@ The following were the steps undertaken to deploy the project to Heroku:
 
 
 ## Credits
+
++ Code Institute - Gitpod template provided for development
++ Heroku - Hosting platform for deployment
++ Gspread python package for spreadsheet data (https://pypi.org/project/gspread/)
++ Google Auth python package for google account (https://pypi.org/project/google-auth/)
++ PyFiglet package used to provide intro graphical text (https://pypi.org/project/pyfiglet/)
++ Tabulate package to format tabular data from sheets (https://pypi.org/project/tabulate/)
