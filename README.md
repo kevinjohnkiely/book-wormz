@@ -4,6 +4,8 @@ BookWormz is a Python terminal application which runs on the Code Institute mock
 
 It is a system where a user can signup, login, and add their favourite books. The user can also perform full CRUD (Create, Read, Update, Delete) operations on these books as they wish.
 
+<img src="https://github.com/kevinjohnkiely/book-wormz/blob/main/wireframesScreenshots/screengrab.jpg">
+
 ## User Flow Diagram
 
 The following diagram gives an outline of the users flow of actions through the application and the different choices of actions that can be undertaken.
