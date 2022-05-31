@@ -6,6 +6,8 @@ It is a system where a user can signup, login, and add their favourite books. Th
 
 <img src="https://github.com/kevinjohnkiely/book-wormz/blob/main/wireframesScreenshots/screengrab.jpg">
 
+Live link to the application is here https://book-wormz-code-institute-2022.herokuapp.com/
+
 ## User Flow Diagram
 
 The following diagram gives an outline of the users flow of actions through the application and the different choices of actions that can be undertaken.
@@ -17,6 +19,8 @@ The following diagram gives an outline of the users flow of actions through the 
 The application stores user and book data in the backend using a Google Spreadsheet, with the necessary packages and code included to link Python with the APIs needed. A user has all their information stored on a dedicated sheet within the spreadsheet, this new sheet being added and partially pre-populated on user signup.
 
 <img src="https://github.com/kevinjohnkiely/book-wormz/blob/main/wireframesScreenshots/sheet.jpg">
+
+The live link to the Google Sheet is here: https://docs.google.com/spreadsheets/d/1QiIYGKE5TPONc8BnQ3dslK7SxTmil3fHE5OTCcvQ728/edit?usp=sharing
 
 ## Coding and Architecture Approach
 
@@ -106,6 +110,7 @@ The following were the steps undertaken to deploy the project to Heroku:
 
 + Code Institute - Gitpod template provided for development
 + Heroku - Hosting platform for deployment
++ Google Sheets - For holding the data in spreadsheet as a backend
 + Gspread python package for spreadsheet data (https://pypi.org/project/gspread/)
 + Google Auth python package for google account (https://pypi.org/project/google-auth/)
 + PyFiglet package used to provide intro graphical text (https://pypi.org/project/pyfiglet/)
